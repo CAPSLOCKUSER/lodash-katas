@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>lodash katas</title>
+  <style type="text/css" media="screen">
+    #editor {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 50%;
+    }
+    #instructions {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 50%;
+    }
+  </style>
+</head>
+<body>
+<div id="editor">
+function evenNumbersOnly(numbers) {
+  // ?
+  return numbers;
+}
+</div>
+<div id="instructions">
+  <button class="tasks task-a">evenNumbersOnly</button>
+  <div class="errors"></div>
+</div>
+
+<script src="ace/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/monokai");
+  editor.getSession().setMode("ace/mode/javascript");
+
+  function testCode(code, fnName, fn) {
+    var script = document.createElement('script');
+    try {
+      script.appendChild(document.createTextNode(code));
+      document.body.appendChild(script);
+    } catch (e) {
+      script.text = code;
+      document.body.appendChild(script);
+    }
+
+    var errors = document.querySelector('.errors');
+    errors.innerText = 'ok!';
+    try {
+      fn(window, fnName); // TODO
+    } catch (error) {
+      errors.innerText = error.message;
+    }
+
+  }
+
+  function assert(condition, message) {
+    if (!condition) {
+      throw new Error(message || 'Assertion failed');
+    }
+  }
+
+  function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
+  document.querySelector('.task-a').addEventListener('click', function(e) {
+    var code = editor.getValue();
+
+    testCode(code, 'evenNumbersOnly', function(ctx, fnName) {
+      var evenNumbersOnly = ctx[fnName];
+
+      assert(arraysEqual(evenNumbersOnly([1,2,3,4,5]), [2,4]));
+    })
+  })
+</script>
+</body>
+</html>
